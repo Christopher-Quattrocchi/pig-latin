@@ -1,3 +1,19 @@
+window.addEventListener("load", function () {
+  console.log("Page loaded successfully");
+  document.querySelector("form#phrase").addEventListener("submit", handleSubmission);
+})
+
+function handleSubmission(event) {
+  event.preventDefault();
+  const aString = document.querySelector("input#input-text").value;
+  const finalResult = firstLetterCheck(aString);
+  const pEle = document.createElement("p");
+  pEle.append(finalResult);
+  document.querySelector("div#output-text").innerHTML = "";
+  const outputDiv = document.querySelector("div#output-text");
+  outputDiv.append(pEle);
+}
+
 function firstLetterCheck(aString) {
   if (!onlyLetters(aString)) {
     console.log("Not alphabet");
@@ -5,7 +21,7 @@ function firstLetterCheck(aString) {
     let lowerString = aString.toLowerCase();
     let textArray = lowerString.split(" ");
     let outputString = buildOutput(textArray);
-    console.log(outputString);
+    return outputString;
   }
 }
 
@@ -26,7 +42,6 @@ function buildOutput(textArray) {
       finalArray.push(consLatin);
     }
   }
-
   return finalArray.join(" ");
 }
 
@@ -44,7 +59,7 @@ function getConsonants(lowerString) {
   } if (!remainingString) {
     remainingString = "";
   }
-  
+
   return {
     consonants: storeConsonant.join(""),
     remainder: remainingString
@@ -52,28 +67,26 @@ function getConsonants(lowerString) {
 }
 
 const vowels = ["a", "e", "i", "o", "u"];
-function vowelStart(firstLetter) {
+function vowelStart(firstLetter) {  //compares first letter to vowel
   if (firstLetter === "a" || firstLetter === "e" || firstLetter === "i" || firstLetter === "o" || firstLetter === "u") {
     return true;
-    console.log("Starts with a vowel.");
   } else {
     return false;
-    console.log("Starts with a consonant");
   }
 }
 
 function onlyLetters(aString) {
-  return /^[a-zA-Z\s.,!?'"()-]+$/.test(aString);
+  return /^[a-zA-Z\s.,]+$/.test(aString);   //characters left out until this gets built out: !?'"()-
 }
 
 function startWithQ(firstLetter) {
-  if (firstLetter === "q") {
-    return true;
-  } else {
-    return false;
-  }
+  return firstLetter === "q";  //manually setting the booleans here was unneccessary, as this will already eval to true or false
 }
 
 function qWord(lowerString) {
-  return lowerString.slice(2) + "quay";
+  if (lowerString.startsWith("qu")) {  //handle weird edge cases like qatar, qat, qi, etc
+    return lowerString.slice(2) + "quay";
+  } else {
+    return lowerString.slice(1) + "qay";
+  }
 }
